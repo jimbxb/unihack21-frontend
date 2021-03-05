@@ -8,7 +8,8 @@ const ModelForm = ({key}) => {
   const [predictionError, setPredictionError] = useState(false);
   let dataRef = useRef();
 
-  const handleClick = () => {
+  const handleSubmit = (event) => {
+    event.preventDefault();
     evalModel(key, dataRef.value)
       .then(({data}) => {
         setPrediction(data);
@@ -20,7 +21,7 @@ const ModelForm = ({key}) => {
       });
   }
 
-  return <Form>
+  return <Form onSubmit={handleSubmit}>
     <Form.Group>
       <Form.Label>Data</Form.Label>
       <Form.Control 
@@ -28,7 +29,7 @@ const ModelForm = ({key}) => {
         placeholder="Input data"
       />
     </Form.Group>
-    <Button onClick={handleClick}>Predict</Button>
+    <Button onClick={handleSubmit}>Predict</Button>
     <Form.Group>
       <Form.Label>Prediction</Form.Label>
       {predictionError
