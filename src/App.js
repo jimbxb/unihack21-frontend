@@ -26,6 +26,10 @@ function App() {
     setFilteredModels(models.filter(({name}) => name.includes(filterString)));
   }, [filterString, models]);
 
+  useEffect(() => {
+    refreshModels();
+  }, []);
+
   return (
     <>
       <NavBar 

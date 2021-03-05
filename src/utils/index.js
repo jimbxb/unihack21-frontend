@@ -3,7 +3,11 @@ import axios from 'axios';
 
 export const getModels = () => {
   return new Promise((res, rej) => {
-    res({ data: [{name: "name0", key: "0"},{name: "name1", key: "1"},{name: "name2", key: "2"}] });
+    res({ data: [
+      {name: "Cool Model", key: "0"},
+      {name: "Cooler Model", key: "1"},
+      {name: "Coolest Model", key: "2"}] 
+    });
   });
   // return axios({
   //   url: "TODO/model",
