@@ -1,9 +1,7 @@
 import './App.css';
-import NavBar from './components/navbar';
+import { NavBar } from './components/navbar';
 import { useState } from 'react';
 import { ModelAccordion } from './components/accordion';
-
-
 
 function App() {
   const [model, setModel] = useState(null);

@@ -11,7 +11,7 @@ export const getModels = () => {
   });
 };
 
-export const callModel = (data) => {
+export const pushModel = (data) => {
   return fetch(
     "/model", 
     {
