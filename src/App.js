@@ -1,11 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 
-import { getModels } from './utils';
-
 function App() {
-  getModels().then(console.log);
-
   return (
     <div className="App">
       <header className="App-header">
