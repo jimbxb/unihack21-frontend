@@ -1,14 +1,9 @@
 
 export const getModels = () => {
-  // return fetch(
-  //   "/model",
-  //   { method: "GET" }
-  // );
-  return new Promise((res, rej) => {
-    res([
-      {"name": "tmp", "key": "tmpkey"}
-    ])
-  });
+  return fetch(
+    "/model",
+    { method: "GET" }
+  );
 };
 
 export const pushModel = (data) => {
