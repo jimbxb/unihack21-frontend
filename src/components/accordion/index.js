@@ -21,27 +21,30 @@ const ModelForm = ({key}) => {
       });
   }
 
-  return <Form onSubmit={handleSubmit}>
-    <Form.Group>
-      <Form.Label>Data</Form.Label>
-      <Form.Control 
-        ref={inputRef => { dataRef = inputRef; }}
-        placeholder="Input data"
-      />
-    </Form.Group>
-    <Button onClick={handleSubmit}>Predict</Button>
-    <Form.Group>
-      <Form.Label>Prediction</Form.Label>
-      {predictionError
-        ? <p>{"There was an error processing your request."}</p>
-        : <p>{prediction}</p>
-      }
-    </Form.Group>
-  </Form>
+  return (
+    <Form onSubmit={handleSubmit}>
+      <Form.Group>
+        <Form.Label>Data</Form.Label>
+        <Form.Control 
+          ref={inputRef => { dataRef = inputRef; }}
+          placeholder="Input data"
+        />
+      </Form.Group>
+      <Button onClick={handleSubmit}>Predict</Button>
+      <Form.Group>
+        <Form.Label>Prediction</Form.Label>
+        {predictionError
+          ? <p>{"There was an error processing your request."}</p>
+          : <p>{prediction}</p>
+        }
+      </Form.Group>
+    </Form>
+  );
 }
 
-export const ModelAccordion = ({models, model, setModel}) => {
-	return <Accordion defaultActiveKey={model?.key}>
+export const ModelAccordion = ({models}) => {
+	return (
+    <Accordion>
       {models.map((model) => {
         const {key, name} = model;
         return <Card key={`card-${key}`}>
@@ -57,5 +60,6 @@ export const ModelAccordion = ({models, model, setModel}) => {
           </Accordion.Collapse>
         </Card>
       })}
-  </Accordion>
+    </Accordion>
+  );
 }
