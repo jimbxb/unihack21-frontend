@@ -11,11 +11,14 @@ export const getModels = () => {
   // });
 };
 
-export const pushModel = (data) => {
+export const pushModel = (name, filename) => {
   return fetch({
     url: "TODO/model", 
     method: "POST",
-    body: JSON.stringify(data)
+    body: JSON.stringify({
+      name,
+      data: filename
+    })
   });
 }
 

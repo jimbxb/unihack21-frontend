@@ -17,7 +17,6 @@ function App() {
   const refreshModels = () => {
     getModels()
       .then(({data}) => {
-        console.log(data);
         setModels(data);
       })
       .catch(console.log)

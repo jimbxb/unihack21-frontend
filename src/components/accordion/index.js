@@ -44,22 +44,27 @@ const ModelForm = ({key}) => {
 
 export const ModelAccordion = ({models}) => {
 	return (
-    <Accordion>
-      {models.map((model) => {
-        const {key, name} = model;
-        return <Card key={`card-${key}`}>
-          <Card.Header>
-            <Accordion.Toggle as={Button} variant="link" eventKey={key}>
-              {name}
-            </Accordion.Toggle>
-          </Card.Header>
-          <Accordion.Collapse eventKey={key}>
-            <Card.Body>
-              <ModelForm model={model}/>
-            </Card.Body>
-          </Accordion.Collapse>
-        </Card>
-      })}
-    </Accordion>
+    models && models.length > 0 
+      ? <Accordion>
+          {models.map((model) => {
+            const {key, name} = model;
+            return <Card key={`card-${key}`}>
+              <Card.Header>
+                <Accordion.Toggle as={Button} variant="link" eventKey={key}>
+                  {name}
+                </Accordion.Toggle>
+              </Card.Header>
+              <Accordion.Collapse eventKey={key}>
+                <Card.Body>
+                  <ModelForm model={model}/>
+                </Card.Body>
+              </Accordion.Collapse>
+            </Card>
+          })}
+        </Accordion>
+    : <>
+        <p>You have no active models.</p>
+        <p>You can add one by pressing the 'Add Model' button.</p>
+      </>
   );
 }
