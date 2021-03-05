@@ -2,7 +2,7 @@ import './App.css';
 import { NavBar } from './components/navbar';
 import { useEffect, useState } from 'react';
 import { ModelAccordion } from './components/accordion';
-import { AddModelModal } from './components/addmodal';
+import { AddModelModal } from './components/modals';
 import { getModels } from './utils';
 
 function App() {
