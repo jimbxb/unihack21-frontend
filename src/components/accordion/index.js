@@ -5,15 +5,17 @@ import { evalModel } from '../../utils';
 
 const ModelForm = ({key}) => {
   const [prediction, setPrediction] = useState("");
+  const [predictionError, setPredictionError] = useState(false);
   let dataRef = useRef();
 
   const handleClick = () => {
     evalModel(key, dataRef.value)
       .then(({data}) => {
         setPrediction(data);
+        setPredictionError(false);
       })
       .catch((err) => {
-        setPrediction("There was an error processing your request.");
+        setPredictionError(true);
         console.log(err);
       });
   }
@@ -29,9 +31,10 @@ const ModelForm = ({key}) => {
     <Button onClick={handleClick}>Predict</Button>
     <Form.Group>
       <Form.Label>Prediction</Form.Label>
-      <p>
-        {prediction}
-      </p>
+      {predictionError
+        ? <p>{"There was an error processing your request."}</p>
+        : <p>{prediction}</p>
+      }
     </Form.Group>
   </Form>
 }
