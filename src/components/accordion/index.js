@@ -43,7 +43,7 @@ export const ModelAccordion = ({models, model, setModel}) => {
 	return <Accordion defaultActiveKey={model?.key}>
       {models.map((model) => {
         const {key, name} = model;
-        return <Card id={`card-${key}`}>
+        return <Card key={`card-${key}`}>
           <Card.Header>
             <Accordion.Toggle as={Button} variant="link" eventKey={key}>
               {name}

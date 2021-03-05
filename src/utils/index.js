@@ -2,10 +2,13 @@ import axios from 'axios';
 
 
 export const getModels = () => {
-  return axios({
-    url: "TODO/model",
-    method: "GET"
+  return new Promise((res, rej) => {
+    res({ data: [{name: "name0", key: "0"},{name: "name1", key: "1"},{name: "name2", key: "2"}] });
   });
+  // return axios({
+  //   url: "TODO/model",
+  //   method: "GET"
+  // });
 };
 
 export const pushModel = (data) => {
