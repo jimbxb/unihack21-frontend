@@ -38,9 +38,16 @@ const ModelForm = ({ model: { key, input_features, output_features } }) => {
         console.log(err);
       });
   }
+
+  const protostyle = {
+    backgroundColor: '#d5f5f2',
+    padding: '20px',
+    borderRadius : '10px',
+
+  }
   
   return (
-    <Form onSubmit={handleSubmit}>
+    <Form onSubmit={handleSubmit} style={protostyle}>
       <Form.Group>
         <Form.Label>Data</Form.Label>
         {input_features?.map(({name, type}) => {
@@ -96,8 +103,14 @@ export const ModelAccordion = ({models}) => {
           {models.map((model) => {
             const {key, name} = model;
             return <Card key={`card-${key}`}>
-              <Card.Header>
-                <Accordion.Toggle as={Button} variant="link" eventKey={key}>
+              <Card.Header 
+                  style={{
+                    background: "linear-gradient(150deg, #81c9c5, #4600f1 100%)",
+                    borderRadius : '10px',
+                    border: '10px blue',
+                  }}>
+                <Accordion.Toggle as={Button} variant="link" eventKey={key} 
+                  style={{color : "black"}}>
                   {name}
                 </Accordion.Toggle>
               </Card.Header>

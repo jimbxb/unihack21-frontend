@@ -16,6 +16,8 @@ export const AddModelModal = ({show, closeAddModelModal, refreshModels}) => {
     closeAddModelModal();
   }
 
+
+
 	return (
     <Modal show={show} onHide={() => { closeAddModelModal(); }}>
       <Modal.Header closeButton>

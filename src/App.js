@@ -30,7 +30,11 @@ function App() {
     refreshModels();
   }, []);
 
+
+
+
   return (
+    
     <>
       <NavBar 
         openAddModelModal={openAddModelModal}
@@ -43,6 +47,7 @@ function App() {
         show={showAddModelModal}
         closeAddModelModal={closeAddModelModal}
         refreshModels={refreshModels}
+        
       />
     </>
   );

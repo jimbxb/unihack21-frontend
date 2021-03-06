@@ -3,7 +3,7 @@ import { Navbar, Button, FormControl, Form } from "react-bootstrap";
 
 export const NavBar = ({openAddModelModal, setFilterString}) => {
 	return (
-		<Navbar sticky="top">
+		<Navbar sticky="top" bg="dark" variant="dark">
 			<Navbar.Brand>Scalr.io</Navbar.Brand>
 			<Form	inline
 				  className="ml-auto">
