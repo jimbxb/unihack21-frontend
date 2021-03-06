@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const host = "http://165.232.169.221:5000";
+const host = "http://api.kvoli.com:5000";
 
 export const getModels = () => {
   const data = axios({

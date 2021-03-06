@@ -116,7 +116,7 @@ export const ModelAccordion = ({models}) => {
                   {name}
                 </Accordion.Toggle>
                 <Accordion.Collapse eventKey={key}>
-                  <Card.Body>
+                  <Card.Body className="card-body">
                     <ModelForm model={model}/>
                   </Card.Body>
                 </Accordion.Collapse>
