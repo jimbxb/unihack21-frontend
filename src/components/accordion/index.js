@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react';
 import { Accordion, Card, Button, Form } from 'react-bootstrap';
 import { evalModel } from '../../utils';
 
+import './index.scss';
+
 const ModelForm = ({ model: { key, input_features, output_features } }) => {
   const [prediction, setPrediction] = useState({});
   const [predictionError, setPredictionError] = useState(false);
@@ -30,7 +32,7 @@ const ModelForm = ({ model: { key, input_features, output_features } }) => {
   const handleInputChange = ({name, type}) => ({target}) => {
     let newVal = undefined;
     switch (type) {
-      case "text":
+      case "string":
         newVal = target.value;
         break;
       case "image":
@@ -53,20 +55,24 @@ const ModelForm = ({ model: { key, input_features, output_features } }) => {
   return (
     <Form onSubmit={handleSubmit}>
       <Form.Group>
-        <Form.Label>Data</Form.Label>
+        <Form.Label className="input-label">Input Data</Form.Label>
         {input_features?.map((feature) => {
           const {name, type} = feature;
           switch (type) {
-            case "text":
+            case "string":
               return (
-                <Form.Control key={name}
+                <Form.Control 
+                  className="form-text"
+                  key={name}
                   placeholder={`Feature: ${name}`}
                   onChange={handleInputChange(feature)}
                 />
               );
             case "image":
               return (
-                <Form.File key={name}
+                <Form.File 
+                  className="form-file"
+                  key={name}
                   label={`Feature: ${name}`}
                   accept=".png"
                   onChange={handleInputChange(feature)}
@@ -83,13 +89,13 @@ const ModelForm = ({ model: { key, input_features, output_features } }) => {
       >
         Predict
       </Button>
-      <Form.Group>
+      <Form.Group className="prediction-group">
         {predictionError
-          ? <p>{"There was an error processing your request."}</p>
+          ? <p className="prediction-error">{"There was an error processing your request."}</p>
           : Object.keys(prediction).length
               ? <>
-                  <p>Predicted Class</p>
-                  <p>{prediction[`${output_features[0].name}_predictions`][0]}</p>
+                  <Form.Label className="prediction-label">Predicted Class</Form.Label>
+                  <p className="prediction">{prediction[`${output_features[0].name}_predictions`][0]}</p>
                 </>
               : null
         }
@@ -101,21 +107,21 @@ const ModelForm = ({ model: { key, input_features, output_features } }) => {
 export const ModelAccordion = ({models}) => {
 	return (
     models && models.length > 0 
-      ? <Accordion>
+      ? <Accordion className="accordion">
           {models.map((model) => {
             const {key, name} = model;
-            return <Card key={`card-${key}`}>
-              <Card.Header>
-                <Accordion.Toggle as={Button} variant="link" eventKey={key}>
+            return (
+              <Card key={`card-${key}`} className="card">
+                <Accordion.Toggle as={Card.Header} eventKey={key}>
                   {name}
                 </Accordion.Toggle>
-              </Card.Header>
-              <Accordion.Collapse eventKey={key}>
-                <Card.Body>
-                  <ModelForm model={model}/>
-                </Card.Body>
-              </Accordion.Collapse>
-            </Card>
+                <Accordion.Collapse eventKey={key}>
+                  <Card.Body>
+                    <ModelForm model={model}/>
+                  </Card.Body>
+                </Accordion.Collapse>
+              </Card>
+            );
           })}
         </Accordion>
       : <>
