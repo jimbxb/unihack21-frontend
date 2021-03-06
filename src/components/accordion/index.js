@@ -1,5 +1,5 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { useEffect, useRef, useState, createRef } from 'react';
+import { createRef, useEffect, useRef, useState } from 'react';
 import { Accordion, Card, Button, Form } from 'react-bootstrap';
 import { evalModel } from '../../utils';
 
@@ -9,8 +9,7 @@ const ModelForm = ({ model: { key, input_features, output_features } }) => {
   const dataRefs = useRef({});
 
   useEffect(() => {
-    dataRefs.current = input_features.reduce((refs, feature) => {
-      const { name } = feature;
+    dataRefs.current = input_features.reduce((refs, {name}) => {
       refs[name] = createRef();
       return refs;
     }, {});
@@ -19,20 +18,20 @@ const ModelForm = ({ model: { key, input_features, output_features } }) => {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    evalModel(key, input_features.reduce((features, {name, type}) => {
-      let data;
+    evalModel(key, input_features.reduce((form, {name, type}) => {
       const dataRef = dataRefs.current[name];
+      console.log(dataRef);
       switch (type) {
         case "text":
-          data = [dataRef.value];
+          form.append(name, dataRef.value);
           break;
         case "image":
-          data = [dataRef.value];
+          form.append(name, dataRef.files[0]);
           break;
         default:
       }
-      return { ...features, name: data };
-    }, {}))
+      return form;
+    }, new FormData()))
       .then((data) => {
         setPrediction(data.msg);
         setPredictionError(false);
@@ -51,14 +50,14 @@ const ModelForm = ({ model: { key, input_features, output_features } }) => {
           switch (type) {
             case "text":
               return (
-                <Form.Control 
+                <Form.Control key={name}
                   ref={dataRefs.current[name]}
                   placeholder={`Feature: ${name}`}
                 />
               );
             case "image":
               return (
-                <Form.File 
+                <Form.File key={name}
                   ref={dataRefs.current[name]}
                   label={`Feature: ${name}`}
                   accept=".png"
