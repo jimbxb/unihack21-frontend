@@ -5,9 +5,9 @@ const host = "http://api.kvoli.com";
 export const getModels = () => {
   // return new Promise((res, rej) => {
   //   res({ data: {
-  //     "0": {name: "Cool Model", id: "0", input_features: [{"name": "doc_text", "type": "string"}], "output_features": [{"name": "class", "type": "category"}]},
-  //     "1": {name: "Cooler Model", id: "1", input_features: [{"name": "doc_text", "type": "string"}, {"name": "doc_image", "type": "image"}], "output_features": [{"name": "class", "type": "category"}]},
-  //     "2": {name: "Coolest Model", id: "2", input_features: [{"name": "doc_text", "type": "string"}], "output_features": [{"name": "class", "type": "category"}]}
+  //     "0": {name: "Cool Model", id: "0", io_params: {input_features: [{"name": "doc_text", "type": "string"}], "output_features": [{"name": "class", "type": "category"}]}},
+  //     "1": {name: "Cooler Model", id: "1", io_params: {input_features: [{"name": "doc_text", "type": "string"}, {"name": "doc_image", "type": "image"}], "output_features": [{"name": "class", "type": "category"}]}},
+  //     "2": {name: "Coolest Model", id: "2", io_params: {input_features: [{"name": "doc_text", "type": "string"}], "output_features": [{"name": "class", "type": "category"}]}}
   //   }});
   // });
   return axios({

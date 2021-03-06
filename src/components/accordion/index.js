@@ -5,7 +5,7 @@ import { evalModel } from '../../utils';
 
 import './index.scss';
 
-const ModelForm = ({ model: { id, input_features } }) => {
+const ModelForm = ({ model: { id, io_params: { input_features, output_features } } }) => {
   const [prediction, setPrediction] = useState({});
   const [predictionError, setPredictionError] = useState(false);
   const [input, setInput] = useState({});
@@ -13,12 +13,13 @@ const ModelForm = ({ model: { id, input_features } }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-
+    console.log(output_features);
     evalModel(id, Object.entries(input).reduce((form, [name, value]) => {
       form.append(name, value);
       return form;
     }, new FormData()))
       .then((data) => {
+        console.log(output_features);
         setPrediction(data.msg);
         setPredictionError(false);
       })
@@ -87,12 +88,15 @@ const ModelForm = ({ model: { id, input_features } }) => {
         Predict
       </Button>
       <Form.Group className="prediction-group">
-        {predictionError
+        {predictionError || (Object.keys(prediction).length
+                             && !prediction[`${output_features[0].name}_predictions`])
           ? <p className="prediction-error">There was an error processing your request.</p>
           : Object.keys(prediction).length
               ? <>
                   <Form.Label className="prediction-label">Predicted Class</Form.Label>
-                  <p className="prediction">{prediction["class_predictions"][0]}</p>
+                  <p className="prediction">
+                    {prediction[`${output_features[0].name}_predictions`][0]}
+                  </p>
                 </>
               : null
         }
