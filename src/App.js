@@ -28,6 +28,7 @@ function App() {
 
   useEffect(() => {
     refreshModels();
+    document.title = "Scalr.io";
   }, []);
 
   return (
@@ -43,6 +44,7 @@ function App() {
         show={showAddModelModal}
         closeAddModelModal={closeAddModelModal}
         refreshModels={refreshModels}
+        filtered={filterString}
       />
     </>
   );

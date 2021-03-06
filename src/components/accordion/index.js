@@ -104,29 +104,49 @@ const ModelForm = ({ model: { key, input_features, output_features } }) => {
   );
 }
 
-export const ModelAccordion = ({models}) => {
+export const ModelAccordion = ({ models, filtered }) => {
 	return (
-    models && models.length > 0 
-      ? <Accordion className="accordion">
-          {models.map((model) => {
-            const {key, name} = model;
-            return (
-              <Card key={`card-${key}`} className="card">
-                <Accordion.Toggle as={Card.Header} eventKey={key}>
-                  {name}
-                </Accordion.Toggle>
-                <Accordion.Collapse eventKey={key}>
-                  <Card.Body className="card-body">
-                    <ModelForm model={model}/>
-                  </Card.Body>
-                </Accordion.Collapse>
-              </Card>
-            );
-          })}
-        </Accordion>
-      : <>
-          <p>You have no active models.</p>
-          <p>You can add one by pressing the 'Add Model' button.</p>
-        </>
+    <div className="accordion-container">
+      {models && models.length > 0 
+        ? <Accordion className="accordion">
+            {models.map((model) => {
+              const {key, name} = model;
+              return (
+                <Card key={`card-${key}`} className="card">
+                  <Accordion.Toggle 
+                    as={Card.Header} 
+                    eventKey={key} 
+                    className="card-name"
+                  >
+                    {name}
+                  </Accordion.Toggle>
+                  <Accordion.Collapse eventKey={key}>
+                    <Card.Body className="card-body">
+                      <ModelForm model={model}/>
+                    </Card.Body>
+                  </Accordion.Collapse>
+                </Card>
+              );
+            })}
+          </Accordion>
+        : <div className="no-models">
+            {filtered
+              ? <>
+                  <p>You have no models that match the applied filter.</p>
+                  <p>
+                    You can add a new model by pressing 'Add Model' button
+                    <br/>
+                    or refining your search term.
+                  </p>
+                </>
+              : <>
+                  <p>You have no active models.</p>
+                  <p>You can add one by pressing 'Add Model'.</p>
+                </>
+            }
+          </div>
+      }
+    </div>
+    
   );
 }
