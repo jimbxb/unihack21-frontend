@@ -75,7 +75,7 @@ const ModelForm = ({ model: { key, input_features, output_features } }) => {
                 case "text":
                   return (
                     <div key={`output-${name}`}>
-                      <Form.Label>name</Form.Label>
+                      <Form.Label>{name}</Form.Label>
                       <p>{value}</p>
                     </div>
                   );
