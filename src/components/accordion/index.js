@@ -1,67 +1,75 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { useEffect, useRef, useState, createRef } from 'react';
+import { useEffect, useState } from 'react';
 import { Accordion, Card, Button, Form } from 'react-bootstrap';
 import { evalModel } from '../../utils';
 
 const ModelForm = ({ model: { key, input_features, output_features } }) => {
-  const [prediction, setPrediction] = useState([]);
+  const [prediction, setPrediction] = useState({});
   const [predictionError, setPredictionError] = useState(false);
-  const dataRefs = useRef({});
-
-  useEffect(() => {
-    dataRefs.current = input_features.reduce((refs, feature) => {
-      const { name } = feature;
-      refs[name] = createRef();
-      return refs;
-    }, {});
-  }, [input_features]);
+  const [input, setInput] = useState({});
+  const [validated, setValidated] = useState(false);
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    evalModel(key, input_features.reduce((features, {name, type}) => {
-      let data;
-      const dataRef = dataRefs.current[name];
-      switch (type) {
-        case "text":
-          data = [dataRef.value];
-          break;
-        case "image":
-          data = [dataRef.value];
-          break;
-        default:
-      }
-      return { ...features, name: data };
-    }, {}))
+    evalModel(key, Object.entries(input).reduce((form, [name, value]) => {
+      form.append(name, value);
+      return form;
+    }, new FormData()))
       .then((data) => {
         setPrediction(data.msg);
         setPredictionError(false);
+        console.log(data.msg);
       })
       .catch((err) => {
         setPredictionError(true);
         console.log(err);
       });
   }
+
+  const handleInputChange = ({name, type}) => ({target}) => {
+    let newVal = undefined;
+    switch (type) {
+      case "text":
+        newVal = target.value;
+        break;
+      case "image":
+        newVal = target.files ? target.files[0] : undefined;
+        break;
+      default:
+    }
+    const {[name]: _tmp, ...newInput} = input;
+    if (newVal) {
+      setInput({ ...newInput, [name]: newVal});
+    } else {
+      setInput(newInput);
+    }
+  }
+
+  useEffect(() => {
+    setValidated(Object.keys(input).length === input_features.length);
+  }, [input]);
   
   return (
     <Form onSubmit={handleSubmit}>
       <Form.Group>
         <Form.Label>Data</Form.Label>
-        {input_features?.map(({name, type}) => {
+        {input_features?.map((feature) => {
+          const {name, type} = feature;
           switch (type) {
             case "text":
               return (
-                <Form.Control 
-                  ref={dataRefs.current[name]}
+                <Form.Control key={name}
                   placeholder={`Feature: ${name}`}
+                  onChange={handleInputChange(feature)}
                 />
               );
             case "image":
               return (
-                <Form.File 
-                  ref={dataRefs.current[name]}
+                <Form.File key={name}
                   label={`Feature: ${name}`}
                   accept=".png"
+                  onChange={handleInputChange(feature)}
                 />  
               );
             default: 
@@ -69,11 +77,16 @@ const ModelForm = ({ model: { key, input_features, output_features } }) => {
           }
         })}
       </Form.Group>
-      <Button onClick={handleSubmit}>Predict</Button>
+      <Button 
+        onClick={handleSubmit}
+        disabled={!validated}
+      >
+        Predict
+      </Button>
       <Form.Group>
         {predictionError
           ? <p>{"There was an error processing your request."}</p>
-          : prediction.length > 0 
+          : Object.keys(prediction).length
               ? <>
                   <p>Predicted Class</p>
                   <p>{prediction[`${output_features[0].name}_predictions`][0]}</p>

@@ -4,8 +4,8 @@ import axios from 'axios';
 export const getModels = () => {
   return new Promise((res, rej) => {
     res({ data: [
-      {name: "Cool Model", key: "0", input_features: [{"name": "doc_text", "type": "text"}, {"name": "doc_image", "type": "image"}], "output_features": [{"name": "class", "type": "category"}]},
-      {name: "Cooler Model", key: "1", input_features: [{"name": "doc_text", "type": "text"}], "output_features": [{"name": "class", "type": "category"}]},
+      {name: "Cool Model", key: "0", input_features: [{"name": "doc_text", "type": "text"}], "output_features": [{"name": "class", "type": "category"}]},
+      {name: "Cooler Model", key: "1", input_features: [{"name": "doc_text", "type": "text"}, {"name": "doc_image", "type": "image"}], "output_features": [{"name": "class", "type": "category"}]},
       {name: "Coolest Model", key: "2", input_features: [{"name": "doc_text", "type": "text"}], "output_features": [{"name": "class", "type": "category"}]}] 
     });
   });
