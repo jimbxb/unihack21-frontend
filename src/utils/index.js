@@ -16,10 +16,10 @@ export const getModels = () => {
   });
 };
 
-export const pushModel = (name, file) => {
+export const pushModel = (name, modelFile) => {
   const form = new FormData();
   form.append("name", name);
-  form.append("file", file);
+  form.append("model", modelFile);
   
   return axios({
     url: `${host}/model`, 
@@ -28,21 +28,26 @@ export const pushModel = (name, file) => {
   });
 }
 
-export const trainModel = (id, data) => {
+export const trainModel = (name, ioFile, dataFile) => {
+  const form = new FormData();
+  form.append("name", name);
+  form.append("io_params", ioFile);
+  form.append("training_data", dataFile);
+  
   return axios({
-    url: `${host}/train/${id}`,
+    url: `${host}/train`,
     method: "POST",
-    body: JSON.stringify(data)
+    body: form
   });
 }
 
 export const evalModel = (id, data) => {
-  // return new Promise((res, rej) => {
-  //   res({ msg: {
-  //     "class_predictions": {
-  //       "0": "sport"
-  //     }}});
-  // });
+  return new Promise((res, rej) => {
+    res({ msg: {
+      "class_predictions": {
+        "0": "sport"
+      }}});
+  });
   return axios({
     url: `${host}/eval`,
     method: "POST",

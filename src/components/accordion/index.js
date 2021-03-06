@@ -48,7 +48,7 @@ const ModelForm = ({ model: { id, input_features } }) => {
 
   useEffect(() => {
     setValidated(Object.keys(input).length === input_features.length);
-  }, [input, input_features.length]);
+  }, [input, input_features]);
   
   return (
     <Form onSubmit={handleSubmit}>
@@ -105,19 +105,25 @@ export const ModelAccordion = ({ models, filtered }) => {
 	return (
     <div className="accordion-container">
       {models && models.length > 0 
-        ? <Accordion className="accordion">
+        ? <Accordion>
             {models.map((model) => {
               const {id, name} = model;
               return (
                 <Card key={`card-${id}`} className="card">
-                  <Card.Header className="card-header">
-                    <Accordion.Toggle 
-                      as={"div"} 
-                      eventKey={`card-${id}`} 
-                    >
-                      {name}
-                    </Accordion.Toggle>
-                  </Card.Header>
+                  <Accordion.Toggle 
+                    as={Card.Header} 
+                    eventKey={`card-${id}`} 
+                    className="card-header"
+                    style={{
+                      background: "linear-gradient(150deg, rgb(53, 53, 53), grey)",
+                      borderRadius: '10px',
+                      borderColor: 'black',
+                      color: 'white',
+                      fontSize: 'larger'
+                    }}
+                  >
+                    {name}
+                  </Accordion.Toggle>
                   <Accordion.Collapse eventKey={`card-${id}`}>
                     <Card.Body className="card-body">
                       <ModelForm model={model}/>
