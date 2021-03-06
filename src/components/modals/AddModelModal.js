@@ -5,20 +5,20 @@ import { Button, Form, FormControl, Modal } from "react-bootstrap";
 import { pushModel, trainModel } from '../../utils';
 
 export const AddModelModal = ({show, closeAddModelModal, refreshModels}) => {
-  let [nameRef, modelRef, ioRef, dataRef] = [useRef(), useRef(), useRef(), useRef()];
+  const [nameRef, modelRef, ioRef, dataRef] = [useRef(), useRef(), useRef(), useRef()];
   const [validated, setValidated] = useState(false);
   const [isPreTrained, setIsPreTrained] = useState(false);
 
   const handleAddModel = () => {
-    const promise = isPreTrained
+    (isPreTrained
       ? pushModel(nameRef.value, modelRef.files[0])
-      : trainModel(nameRef.value, ioRef.files[0], dataRef.files[0])
-    promise.then(() => {
-      refreshModels();
-    })
-    .catch((err) => {
-      console.error(err);
-    });
+      : trainModel(nameRef.value, ioRef.files[0], dataRef.files[0]))
+      .then(() => {
+        refreshModels();
+      })
+      .catch((err) => {
+        console.error(err);
+      });
     closeAddModelModal();
   }
 
