@@ -17,7 +17,8 @@ function App() {
   const refreshModels = () => {
     getModels()
       .then(({data}) => {
-        setModels(data);
+        console.log(data);
+        setModels(Object.values(data));
       })
       .catch(console.log)
   }

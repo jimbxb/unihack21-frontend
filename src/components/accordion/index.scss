@@ -6,8 +6,11 @@
   background-color:white;
 }
 
-.cord-name {
+.cord-header {
   font-size: large;
+  background: linear-gradient(150deg, #81c9c5, #4600f1 100%);
+  border-radius: 10px;
+  border: 10px blue;
 }
 
 .accordion-container {

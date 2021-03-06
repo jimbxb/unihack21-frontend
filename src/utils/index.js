@@ -3,21 +3,17 @@ import axios from 'axios';
 const host = "http://api.kvoli.com";
 
 export const getModels = () => {
-  axios({
+  // return new Promise((res, rej) => {
+  //   res({ data: {
+  //     "0": {name: "Cool Model", id: "0", input_features: [{"name": "doc_text", "type": "string"}], "output_features": [{"name": "class", "type": "category"}]},
+  //     "1": {name: "Cooler Model", id: "1", input_features: [{"name": "doc_text", "type": "string"}, {"name": "doc_image", "type": "image"}], "output_features": [{"name": "class", "type": "category"}]},
+  //     "2": {name: "Coolest Model", id: "2", input_features: [{"name": "doc_text", "type": "string"}], "output_features": [{"name": "class", "type": "category"}]}
+  //   }});
+  // });
+  return axios({
     url: `${host}/model`,
     method: "GET"
-  }).then(console.log).catch(console.log);
-  return new Promise((res, rej) => {
-    res({ data: [
-      {name: "Cool Model", key: "0", input_features: [{"name": "doc_text", "type": "string"}], "output_features": [{"name": "class", "type": "category"}]},
-      {name: "Cooler Model", key: "1", input_features: [{"name": "doc_text", "type": "string"}, {"name": "doc_image", "type": "image"}], "output_features": [{"name": "class", "type": "category"}]},
-      {name: "Coolest Model", key: "2", input_features: [{"name": "doc_text", "type": "string"}], "output_features": [{"name": "class", "type": "category"}]}] 
-    });
   });
-  // return axios({
-  //   url: `${host}/model`,
-  //   method: "GET"
-  // });
 };
 
 export const pushModel = (name, file) => {
@@ -32,27 +28,27 @@ export const pushModel = (name, file) => {
   });
 }
 
-export const trainModel = (key, data) => {
+export const trainModel = (id, data) => {
   return axios({
-    url: `${host}/train/${key}`,
+    url: `${host}/train/${id}`,
     method: "POST",
     body: JSON.stringify(data)
   });
 }
 
-export const evalModel = (key, data) => {
-  return new Promise((res, rej) => {
-    res({ msg: {
-      "class_predictions": {
-        "0": "sport"
-      }}});
-  });
-  // return axios({
-  //   url: `${host}/eval`,
-  //   method: "POST",
-  //   body: JSON.stringify({
-  //     key,
-  //     data
-  //   })
+export const evalModel = (id, data) => {
+  // return new Promise((res, rej) => {
+  //   res({ msg: {
+  //     "class_predictions": {
+  //       "0": "sport"
+  //     }}});
   // });
+  return axios({
+    url: `${host}/eval`,
+    method: "POST",
+    body: JSON.stringify({
+      id,
+      data
+    })
+  });
 }

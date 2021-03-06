@@ -5,7 +5,7 @@ import { evalModel } from '../../utils';
 
 import './index.scss';
 
-const ModelForm = ({ model: { key, input_features, output_features } }) => {
+const ModelForm = ({ model: { id, input_features } }) => {
   const [prediction, setPrediction] = useState({});
   const [predictionError, setPredictionError] = useState(false);
   const [input, setInput] = useState({});
@@ -14,14 +14,13 @@ const ModelForm = ({ model: { key, input_features, output_features } }) => {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    evalModel(key, Object.entries(input).reduce((form, [name, value]) => {
+    evalModel(id, Object.entries(input).reduce((form, [name, value]) => {
       form.append(name, value);
       return form;
     }, new FormData()))
       .then((data) => {
         setPrediction(data.msg);
         setPredictionError(false);
-        console.log(data.msg);
       })
       .catch((err) => {
         setPredictionError(true);
@@ -32,17 +31,16 @@ const ModelForm = ({ model: { key, input_features, output_features } }) => {
   const handleInputChange = ({name, type}) => ({target}) => {
     let newVal = undefined;
     switch (type) {
-      case "string":
-        newVal = target.value;
-        break;
       case "image":
         newVal = target.files ? target.files[0] : undefined;
         break;
       default:
+        newVal = target.value;
+        break;
     }
-    const {[name]: _tmp, ...newInput} = input;
+    const { [name]: _tmp, ...newInput } = input;
     if (newVal) {
-      setInput({ ...newInput, [name]: newVal});
+      setInput({ ...newInput, [name]: newVal });
     } else {
       setInput(newInput);
     }
@@ -56,46 +54,45 @@ const ModelForm = ({ model: { key, input_features, output_features } }) => {
     <Form onSubmit={handleSubmit}>
       <Form.Group>
         <Form.Label className="input-label">Input Data</Form.Label>
-        {input_features?.map((feature) => {
+        {input_features?.map((feature, idx) => {
           const {name, type} = feature;
           switch (type) {
-            case "string":
-              return (
-                <Form.Control 
-                  className="form-text"
-                  key={name}
-                  placeholder={`Feature: ${name}`}
-                  onChange={handleInputChange(feature)}
-                />
-              );
             case "image":
               return (
                 <Form.File 
                   className="form-file"
-                  key={name}
+                  key={`${name}-${idx}`}
                   label={`Feature: ${name}`}
                   accept=".png"
                   onChange={handleInputChange(feature)}
                 />  
               );
             default: 
-              return undefined;
+              return (
+                <Form.Control 
+                  className="form-text"
+                  key={`${name}-${idx}`}
+                  placeholder={`Feature: ${name}`}
+                  onChange={handleInputChange(feature)}
+                />
+              );
           }
         })}
       </Form.Group>
       <Button 
         onClick={handleSubmit}
         disabled={!validated}
+        variant="outline-dark"
       >
         Predict
       </Button>
       <Form.Group className="prediction-group">
         {predictionError
-          ? <p className="prediction-error">{"There was an error processing your request."}</p>
+          ? <p className="prediction-error">There was an error processing your request.</p>
           : Object.keys(prediction).length
               ? <>
                   <Form.Label className="prediction-label">Predicted Class</Form.Label>
-                  <p className="prediction">{prediction[`${output_features[0].name}_predictions`][0]}</p>
+                  <p className="prediction">{prediction["class_predictions"][0]}</p>
                 </>
               : null
         }
@@ -110,17 +107,18 @@ export const ModelAccordion = ({ models, filtered }) => {
       {models && models.length > 0 
         ? <Accordion className="accordion">
             {models.map((model) => {
-              const {key, name} = model;
+              const {id, name} = model;
               return (
-                <Card key={`card-${key}`} className="card">
-                  <Accordion.Toggle 
-                    as={Card.Header} 
-                    eventKey={key} 
-                    className="card-name"
-                  >
-                    {name}
-                  </Accordion.Toggle>
-                  <Accordion.Collapse eventKey={key}>
+                <Card key={`card-${id}`} className="card">
+                  <Card.Header className="card-header">
+                    <Accordion.Toggle 
+                      as={"div"} 
+                      eventKey={`card-${id}`} 
+                    >
+                      {name}
+                    </Accordion.Toggle>
+                  </Card.Header>
+                  <Accordion.Collapse eventKey={`card-${id}`}>
                     <Card.Body className="card-body">
                       <ModelForm model={model}/>
                     </Card.Body>
