@@ -29,36 +29,36 @@ function App() {
   }, [filterString, models]);
 
   useEffect(() => {
-    refreshModels();
-    document.title = "Scalr.io";
+    const handle = setInterval(async () => {
+      refreshModels();
+      document.title = "Scalr.io";
+      getNodes()
+        .then(({ data: nodes }) => {
+          Promise.all(nodes.map(({serverId}) => (
+            getNodeStats(serverId)
+              .then(({data}) => ({ ok: true, data }))
+              .catch(({err}) => ({ ok: false, err }))
+          )))
+            .then((resolutions) => {
+              const name = cpuData.length ? cpuData[cpuData.length - 1].name + 1 : 0;
+              const entry = resolutions.reduce((acc, {ok, data: {cpu_percent}}, idx) => {
+                if (ok) {
+                  acc[`compute${idx}`] = cpu_percent * 100;
+                }
+                return acc;
+              }, {});
+              setCpuData((old) => ([...old, {name, ...entry}]));
+            })          
+            .catch(e => console.log(e));
+        })
+        .catch(e => console.log(e));
+    }, 5000);
 
-    try {
-      setInterval(async () => {
-        getNodes()
-          .then(({ data: nodes }) => {
-            Promise.all(nodes.map(({serverId}) => (
-              getNodeStats(serverId)
-                .then(({data}) => ({ ok: true, data }))
-                .catch(({err}) => ({ ok: false, err }))
-            )))
-              .then((resolutions) => {
-                const name = cpuData.length ? cpuData[cpuData.length - 1].name + 1 : 0;
-                const entry = resolutions.reduce((acc, {ok, data: {cpu_percent}}, idx) => {
-                  if (ok) {
-                    acc[`compute${idx}`] = cpu_percent * 100;
-                  }
-                  return acc;
-                }, {});
-                setCpuData((old) => ([...old, {name, ...entry}]));
-              })          
-              .catch(e => console.log(e));
-          })
-          .catch(e => console.log(e));
-      }, 5000);
-    } catch (e) {
-      console.log(e);
-    }
-  }, [cpuData]);
+    return () => {
+      clearInterval(handle);
+    };
+
+  }, []);
 
   return (
     <>
