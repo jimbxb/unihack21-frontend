@@ -1,6 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './AddModelModal.scss';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { Button, Form, FormControl, Modal } from "react-bootstrap";
 import { pushModel, trainModel } from '../../utils';
 
@@ -30,10 +30,6 @@ export const AddModelModal = ({show, closeAddModelModal, refreshModels}) => {
             : ioRef?.files?.length && dataRef?.files?.length) 
     );
   }
-
-  useEffect(() => {
-    checkValidation();
-  }, []);
 
 	return (
     <Modal show={show} onHide={() => { closeAddModelModal(); }}>
