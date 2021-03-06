@@ -32,6 +32,7 @@ export const AddModelModal = ({show, closeAddModelModal, refreshModels}) => {
           <Form.File 
             label="Model file" 
             ref={inputRef => { modelRef = inputRef; }}
+            accept=".zip"
           />
         </Form>
       </Modal.Body>

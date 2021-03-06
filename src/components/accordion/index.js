@@ -1,16 +1,34 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState, createRef } from 'react';
 import { Accordion, Card, Button, Form } from 'react-bootstrap';
 import { evalModel } from '../../utils';
 
-const ModelForm = ({key}) => {
-  const [prediction, setPrediction] = useState("");
+const ModelForm = ({ model: { key, input_features, output_features } }) => {
+  const [prediction, setPrediction] = useState([]);
   const [predictionError, setPredictionError] = useState(false);
-  let dataRef = useRef();
+  const dataRefs = useRef({});
+
+  useEffect(() => {
+    dataRefs.current = input_features.reduce((refs, feature) => {
+      const { name } = feature;
+      refs[name] = createRef();
+      return refs;
+    }, {});
+  }, [input_features]);
 
   const handleSubmit = (event) => {
+    console.log(dataRefs.current);
     event.preventDefault();
-    evalModel(key, dataRef.value)
+    evalModel(key, input_features.reduce((features, {name, type}) => {
+      let data;
+      switch (type) {
+        case "text":
+          data = dataRefs.current[name].value;
+          break;
+        default:
+      }
+      return { ...features, name: data };
+    }, {}))
       .then(({data}) => {
         setPrediction(data);
         setPredictionError(false);
@@ -20,22 +38,51 @@ const ModelForm = ({key}) => {
         console.log(err);
       });
   }
-
+  
   return (
     <Form onSubmit={handleSubmit}>
       <Form.Group>
         <Form.Label>Data</Form.Label>
-        <Form.Control 
-          ref={inputRef => { dataRef = inputRef; }}
-          placeholder="Input data"
-        />
+        {input_features?.map(({name, type}) => {
+          switch (type) {
+            case "text":
+              return (
+                <Form.Control 
+                  ref={dataRefs.current[name]}
+                  placeholder={`Input ${name}`}
+                />
+              );
+            case "image":
+              return (
+                <Form.File 
+                  ref={dataRefs.current[name]}
+                  label={`${name} file`}
+                  accept=".png"
+                />  
+              );
+            default: 
+              return undefined;
+          }
+        })}
       </Form.Group>
       <Button onClick={handleSubmit}>Predict</Button>
       <Form.Group>
         <Form.Label>Prediction</Form.Label>
         {predictionError
           ? <p>{"There was an error processing your request."}</p>
-          : <p>{prediction}</p>
+          : prediction.map(({name, value}, idx) => {
+              switch (output_features[idx].type) {
+                case "text":
+                  return (
+                    <div key={`output-${name}`}>
+                      <Form.Label>name</Form.Label>
+                      <p>{value}</p>
+                    </div>
+                  );
+                default:
+                  return undefined;
+              }
+            })
         }
       </Form.Group>
     </Form>
