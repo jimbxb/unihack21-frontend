@@ -9,17 +9,19 @@ export const AddModelModal = ({show, closeAddModelModal, refreshModels}) => {
   const [validated, setValidated] = useState(false);
 
   const handleAddModel = () => {
-    pushModel(nameRef.value)
+    pushModel(nameRef.value, modelRef.files[0])
       .then(() => {
         refreshModels();
       })
-      .catch();
+      .catch((err) => {
+        console.error(err);
+      });
     closeAddModelModal();
   }
 
   const checkValidation = () => {
     setValidated(
-      modelRef?.files?.length && (nameRef?.value ?? "") !== ""
+      modelRef?.files?.length && (nameRef?.value ?? "")
     );
   }
 
