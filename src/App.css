@@ -1,3 +1,4 @@
-.root {
-    width:50vw;
+#root {
+  background-color: rgb(172, 198, 221);
+  height: 100vh;
 }

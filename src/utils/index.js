@@ -1,13 +1,17 @@
 import axios from 'axios';
 
-const host = "https://165.232.169.221:5000"
+const host = "http://api.kvoli.com:5000";
 
 export const getModels = () => {
+  const data = axios({
+    url: `${host}/model`,
+    method: "GET"
+  }).then(console.log).catch(console.log);
   return new Promise((res, rej) => {
     res({ data: [
-      {name: "Cool Model", key: "0", input_features: [{"name": "doc_text", "type": "text"}], "output_features": [{"name": "class", "type": "category"}]},
-      {name: "Cooler Model", key: "1", input_features: [{"name": "doc_text", "type": "text"}, {"name": "doc_image", "type": "image"}], "output_features": [{"name": "class", "type": "category"}]},
-      {name: "Coolest Model", key: "2", input_features: [{"name": "doc_text", "type": "text"}], "output_features": [{"name": "class", "type": "category"}]}] 
+      {name: "Cool Model", key: "0", input_features: [{"name": "doc_text", "type": "string"}], "output_features": [{"name": "class", "type": "category"}]},
+      {name: "Cooler Model", key: "1", input_features: [{"name": "doc_text", "type": "string"}, {"name": "doc_image", "type": "image"}], "output_features": [{"name": "class", "type": "category"}]},
+      {name: "Coolest Model", key: "2", input_features: [{"name": "doc_text", "type": "string"}], "output_features": [{"name": "class", "type": "category"}]}] 
     });
   });
   // return axios({
