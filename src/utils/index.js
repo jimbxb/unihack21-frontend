@@ -48,12 +48,12 @@ export const evalModel = (id, data) => {
         "0": "sport"
       }}});
   });
-  return axios({
-    url: `${host}/eval`,
-    method: "POST",
-    body: JSON.stringify({
-      id,
-      data
-    })
-  });
+  // return axios({
+  //   url: `${host}/eval`,
+  //   method: "POST",
+  //   body: JSON.stringify({
+  //     id,
+  //     data
+  //   })
+  // });
 }
