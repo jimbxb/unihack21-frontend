@@ -50,7 +50,7 @@ const ModelForm = ({ model: { key, input_features, output_features } }) => {
 
   useEffect(() => {
     setValidated(Object.keys(input).length === input_features.length);
-  }, [input]);
+  }, [input, input_features.length]);
   
   return (
     <Form onSubmit={handleSubmit}>

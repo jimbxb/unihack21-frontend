@@ -3,7 +3,7 @@ import axios from 'axios';
 const host = "http://api.kvoli.com:5000";
 
 export const getModels = () => {
-  const data = axios({
+  axios({
     url: `${host}/model`,
     method: "GET"
   }).then(console.log).catch(console.log);
