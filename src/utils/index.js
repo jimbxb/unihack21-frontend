@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const host = "http://api.kvoli.com";
+const host = "https://dev.kvoli.com";
 
 export const getModels = () => {
   return new Promise((res, rej) => {
