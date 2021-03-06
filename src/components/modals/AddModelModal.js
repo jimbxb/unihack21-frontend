@@ -1,20 +1,31 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Button, Form, FormControl, Modal } from "react-bootstrap";
 import { pushModel } from '../../utils';
 
 export const AddModelModal = ({show, closeAddModelModal, refreshModels}) => {
   let nameRef = useRef();
   let modelRef = useRef();
+  const [validated, setValidated] = useState(false);
 
   const handleAddModel = () => {
-    pushModel(nameRef.value, modelRef.value)
+    pushModel(nameRef.value)
       .then(() => {
         refreshModels();
       })
       .catch();
     closeAddModelModal();
   }
+
+  const checkValidation = () => {
+    setValidated(
+      modelRef?.files?.length && (nameRef?.value ?? "") !== ""
+    );
+  }
+
+  useEffect(() => {
+    checkValidation();
+  }, []);
 
 	return (
     <Modal show={show} onHide={() => { closeAddModelModal(); }}>
@@ -28,16 +39,18 @@ export const AddModelModal = ({show, closeAddModelModal, refreshModels}) => {
           <FormControl
             placeholder="Model name"
             ref={inputRef => { nameRef = inputRef; }}
+            onChange={checkValidation}
           />
           <Form.File 
             label="Model file" 
             ref={inputRef => { modelRef = inputRef; }}
+            onChange={checkValidation}
             accept=".zip"
           />
         </Form>
       </Modal.Body>
       <Modal.Footer>
-        <Button onClick={handleAddModel}>
+        <Button onClick={handleAddModel} disabled={!validated}>
           Add
         </Button>
       </Modal.Footer>
