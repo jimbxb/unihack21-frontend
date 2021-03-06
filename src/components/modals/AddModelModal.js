@@ -5,7 +5,7 @@ import { Button, Form, FormControl, Modal } from "react-bootstrap";
 import { pushModel, trainModel } from '../../utils';
 
 export const AddModelModal = ({show, closeAddModelModal, refreshModels}) => {
-  const [nameRef, modelRef, ioRef, dataRef] = [useRef(), useRef(), useRef(), useRef()];
+  let [nameRef, modelRef, ioRef, dataRef] = [useRef(), useRef(), useRef(), useRef()];
   const [validated, setValidated] = useState(false);
   const [isPreTrained, setIsPreTrained] = useState(false);
 

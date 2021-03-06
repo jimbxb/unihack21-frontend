@@ -3,17 +3,16 @@ import axios from 'axios';
 const host = "http://api.kvoli.com";
 
 export const getModels = () => {
-  // return new Promise((res, rej) => {
-  //   res({ data: {
-  //     "0": {name: "Cool Model", id: "0", io_params: {input_features: [{"name": "doc_text", "type": "string"}], "output_features": [{"name": "class", "type": "category"}]}},
-  //     "1": {name: "Cooler Model", id: "1", io_params: {input_features: [{"name": "doc_text", "type": "string"}, {"name": "doc_image", "type": "image"}], "output_features": [{"name": "class", "type": "category"}]}},
-  //     "2": {name: "Coolest Model", id: "2", io_params: {input_features: [{"name": "doc_text", "type": "string"}], "output_features": [{"name": "class", "type": "category"}]}}
-  //   }});
-  // });
-  return axios({
-    url: `${host}/model`,
-    method: "GET"
+  return new Promise((res, rej) => {
+    res({ data: {
+      "0": {name: "Cool Model", id: "0", io_params: {input_features: [{"name": "doc_text", "type": "string"}], "output_features": [{"name": "class", "type": "category"}]}},
+      "2": {name: "Coolest Model", id: "2", io_params: {input_features: [{"name": "doc_text", "type": "string"}], "output_features": [{"name": "class", "type": "category"}]}}
+    }});
   });
+  // return axios({
+  //   url: `${host}/model`,
+  //   method: "GET"
+  // });
 };
 
 export const pushModel = (name, modelFile) => {
@@ -56,4 +55,22 @@ export const evalModel = (id, data) => {
   //     data
   //   })
   // });
+}
+
+export const getNodes = () => {
+  return axios({
+    url: `${host}/nodes`,
+    method: "GET"
+  });
+}
+
+export const getNodeStats = (nodeUrl) => {
+  // return axios({
+  //   url: `${nodeUrl}/stats`,
+  //   method: "GET"
+  // });
+  return new Promise((res, rej) => {
+    res({ data: {
+      "cpu_percent": Math.random()}});
+  });
 }

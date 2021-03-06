@@ -13,13 +13,11 @@ const ModelForm = ({ model: { id, io_params: { input_features, output_features }
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(output_features);
     evalModel(id, Object.entries(input).reduce((form, [name, value]) => {
       form.append(name, value);
       return form;
     }, new FormData()))
       .then((data) => {
-        console.log(output_features);
         setPrediction(data.msg);
         setPredictionError(false);
       })

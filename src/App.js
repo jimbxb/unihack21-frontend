@@ -3,13 +3,15 @@ import { NavBar } from './components/navbar';
 import { useEffect, useState } from 'react';
 import { ModelAccordion } from './components/accordion';
 import { AddModelModal } from './components/modals';
-import { getModels } from './utils';
+import { getModels, getNodes, getNodeStats } from './utils';
+import Status from './components/status';
 
 function App() {
   const [models, setModels] = useState([]);
   const [filteredModels, setFilteredModels] = useState([]);
   const [showAddModelModal, setShowAddModelModal] = useState(false);
   const [filterString, setFilterString] = useState("");
+  const [cpuData, setCpuData] = useState([]);
 
   const openAddModelModal = () => setShowAddModelModal(true);
   const closeAddModelModal = () => setShowAddModelModal(false);
@@ -19,7 +21,7 @@ function App() {
       .then(({data}) => {
         setModels(Object.values(data));
       })
-      .catch(console.log)
+      .catch(e => console.log(e));
   }
 
   useEffect(() => {
@@ -29,7 +31,34 @@ function App() {
   useEffect(() => {
     refreshModels();
     document.title = "Scalr.io";
-  }, []);
+
+    try {
+      setInterval(async () => {
+        getNodes()
+          .then(({ data: nodes }) => {
+            Promise.all(nodes.map(({serverId}) => (
+              getNodeStats(serverId)
+                .then(({data}) => ({ ok: true, data }))
+                .catch(({err}) => ({ ok: false, err }))
+            )))
+              .then((resolutions) => {
+                const name = cpuData.length ? cpuData[cpuData.length - 1].name + 1 : 0;
+                const entry = resolutions.reduce((acc, {ok, data: {cpu_percent}}, idx) => {
+                  if (ok) {
+                    acc[`compute${idx}`] = cpu_percent * 100;
+                  }
+                  return acc;
+                }, {});
+                setCpuData((old) => ([...old, {name, ...entry}]));
+              })          
+              .catch(e => console.log(e));
+          })
+          .catch(e => console.log(e));
+      }, 5000);
+    } catch (e) {
+      console.log(e);
+    }
+  }, [cpuData]);
 
   return (
     <>
@@ -46,6 +75,7 @@ function App() {
         refreshModels={refreshModels}
         filtered={filterString}
       />
+      <Status data={cpuData}/>
     </>
   );
 }
