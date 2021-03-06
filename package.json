@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@cubejs-client/core": "^0.26.45",
+    "@cubejs-client/react": "^0.26.49",
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.5",
     "@testing-library/user-event": "^12.8.1",
@@ -14,6 +16,8 @@
     "react-dom": "^17.0.1",
     "react-scripts": "4.0.3",
     "react-select": "^4.2.0",
+    "recharts": "^2.0.8",
+    "rxjs": "^6.6.6",
     "web-vitals": "^1.1.0"
   },
   "scripts": {
