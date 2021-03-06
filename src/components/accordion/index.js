@@ -17,20 +17,24 @@ const ModelForm = ({ model: { key, input_features, output_features } }) => {
   }, [input_features]);
 
   const handleSubmit = (event) => {
-    console.log(dataRefs.current);
     event.preventDefault();
+
     evalModel(key, input_features.reduce((features, {name, type}) => {
       let data;
+      const dataRef = dataRefs.current[name];
       switch (type) {
         case "text":
-          data = dataRefs.current[name].value;
+          data = [dataRef.value];
+          break;
+        case "image":
+          data = [dataRef.value];
           break;
         default:
       }
       return { ...features, name: data };
     }, {}))
-      .then(({data}) => {
-        setPrediction(data);
+      .then((data) => {
+        setPrediction(data.msg);
         setPredictionError(false);
       })
       .catch((err) => {
@@ -56,14 +60,14 @@ const ModelForm = ({ model: { key, input_features, output_features } }) => {
               return (
                 <Form.Control 
                   ref={dataRefs.current[name]}
-                  placeholder={`Input ${name}`}
+                  placeholder={`Feature: ${name}`}
                 />
               );
             case "image":
               return (
                 <Form.File 
                   ref={dataRefs.current[name]}
-                  label={`${name} file`}
+                  label={`Feature: ${name}`}
                   accept=".png"
                 />  
               );
@@ -74,22 +78,14 @@ const ModelForm = ({ model: { key, input_features, output_features } }) => {
       </Form.Group>
       <Button onClick={handleSubmit}>Predict</Button>
       <Form.Group>
-        <Form.Label>Prediction</Form.Label>
         {predictionError
           ? <p>{"There was an error processing your request."}</p>
-          : prediction.map(({name, value}, idx) => {
-              switch (output_features[idx].type) {
-                case "text":
-                  return (
-                    <div key={`output-${name}`}>
-                      <Form.Label>{name}</Form.Label>
-                      <p>{value}</p>
-                    </div>
-                  );
-                default:
-                  return undefined;
-              }
-            })
+          : prediction.length > 0 
+              ? <>
+                  <p>Predicted Class</p>
+                  <p>{prediction[`${output_features[0].name}_predictions`][0]}</p>
+                </>
+              : null
         }
       </Form.Group>
     </Form>
@@ -122,9 +118,9 @@ export const ModelAccordion = ({models}) => {
             </Card>
           })}
         </Accordion>
-    : <>
-        <p>You have no active models.</p>
-        <p>You can add one by pressing the 'Add Model' button.</p>
-      </>
+      : <>
+          <p>You have no active models.</p>
+          <p>You can add one by pressing the 'Add Model' button.</p>
+        </>
   );
 }

@@ -35,12 +35,18 @@ export const trainModel = (key, data) => {
 }
 
 export const evalModel = (key, data) => {
-  return axios({
-    url: "TODO/eval",
-    method: "POST",
-    body: JSON.stringify({
-      key,
-      data
-    })
+  return new Promise((res, rej) => {
+    res({ msg: {
+      "class_predictions": {
+        "0": "sport"
+      }}});
   });
+  // return axios({
+  //   url: "TODO/eval",
+  //   method: "POST",
+  //   body: JSON.stringify({
+  //     key,
+  //     data
+  //   })
+  // });
 }
