@@ -118,7 +118,6 @@ export const ModelAccordion = ({ models, filtered }) => {
                     className="card-header"
                     style={{
                       background: "linear-gradient(150deg, rgb(53, 53, 53), grey)",
-                      borderRadius: '10px',
                       borderColor: 'black',
                       color: 'white',
                       fontSize: 'larger'
