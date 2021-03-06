@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const host = "165.232.169.221:5000"
+const host = "https://165.232.169.221:5000"
 
 export const getModels = () => {
   return new Promise((res, rej) => {
