@@ -42,16 +42,9 @@ const ModelForm = ({ model: { key, input_features, output_features } }) => {
         console.log(err);
       });
   }
-
-  const protostyle = {
-    backgroundColor: '#d5f5f2',
-    padding: '20px',
-    borderRadius : '10px',
-
-  }
   
   return (
-    <Form onSubmit={handleSubmit} style={protostyle}>
+    <Form onSubmit={handleSubmit}>
       <Form.Group>
         <Form.Label>Data</Form.Label>
         {input_features?.map(({name, type}) => {
