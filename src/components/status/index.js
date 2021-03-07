@@ -5,55 +5,36 @@ import './index.scss';
 
 const startTime = new Date();
 
-const Status = ({ data }) => {
-  const { name: _name, ...names } = data[0] ?? {}
-  const nodeNames = Object.keys(names);
+const Status = ({ text, dataKey, data, numNodes, showBadges=true }) => {
   
+  console.log(data);
+
   return (
-    <Navbar fixed="bottom" className="bar">
-      <div>
-        <Badge variant="success">
-          Server: Online
-        </Badge>{' '}
-        {nodeNames.map((name) => (
-          <>
-            <Badge variant="success" key={`badge-${name}`}>
-              {`Node '${name}': Online`}
-            </Badge>
-            {' '}
-          </>
-        ))}
-      </div>
-      <h5>CPU Usage:</h5>
+   
+      <>
+      <h5>{text}</h5>
       <ResponsiveContainer width="100%" height={200}>
         <AreaChart
-          data={data.map((data, index) => {
-            const {name, ...rest} = data;
-            return {name: new Date(startTime.getTime() + index * 5000), ...rest};
-          })}
-          margin={{
-            top: 10,
-            right: 30,
-            left: 0,
-            bottom: 0,
-          }}
+          data={data}
+          
         >
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" />
+          <XAxis dataKey="time" />
           <YAxis />
           <Tooltip />
-          {nodeNames.map((name) => (
+          {[...Array(numNodes).keys()].map((_, i) => (
             <Area 
               type="monotone" 
-              dataKey={name} 
+              dataKey={`${dataKey}-${i}`} 
               stroke="rgb(53, 53, 53)" 
               fill="grey" 
-              key={`area-${name}`} 
+              key={`cpu_percent-${i}`} 
             />
           ))}
         </AreaChart>
       </ResponsiveContainer>
-    </Navbar>
+      </>
+   
   )
 }
 

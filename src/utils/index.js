@@ -64,13 +64,9 @@ export const getNodes = () => {
   });
 }
 
-export const getNodeStats = (nodeUrl) => {
-  // return axios({
-  //   url: `${nodeUrl}/stats`,
-  //   method: "GET"
-  // });
-  return new Promise((res, rej) => {
-    res({ data: {
-      "cpu_percent": Math.random()}});
+export const getNodeStats = () => {
+  return axios({
+    url: `${host}/stats`,
+    method: "GET"
   });
 }
